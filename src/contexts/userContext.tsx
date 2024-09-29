@@ -5,8 +5,10 @@ import useSocket from "@/hooks/useSocket";
 import React, { createContext, useState, ReactNode } from "react";
 
 interface User {
+  userId: string;
   name: string;
   email: string;
+  profile?: string;
 }
 
 export interface UserContextType {

@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div className="w-full h-16 flex items-center justify-between bg-[#55AD9B] fixed z-10">
+    <div className="w-full h-16 flex items-center justify-between bg-[#55AD9B] fixed z-50">
       <div className="px-10 font-cursive text-2xl font-extrabold text-white">
         Insights
       </div>

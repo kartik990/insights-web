@@ -48,7 +48,12 @@ const SignIn = () => {
     mutationFn: login,
     onSuccess: (data: any) => {
       console.log(data);
-      addUser({ email: data?.data?.email, name: data?.data?.name });
+      addUser({
+        userId: data.data.userId,
+        email: data?.data?.email,
+        name: data?.data?.name,
+        profile: data.data.profile,
+      });
       router.push("/");
     },
     onError: (error: any) => {
@@ -58,8 +63,22 @@ const SignIn = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({
-      email: values.email,
-      password: values.password,
+      email: values.email || "bruce@mail.com",
+      password: values.password || "passway",
+    });
+  }
+
+  async function dummyLogin() {
+    mutate({
+      email: "bruce@mail.com",
+      password: "passway",
+    });
+  }
+
+  async function dummyLogin2() {
+    mutate({
+      email: "clark@mail.com",
+      password: "passway",
     });
   }
 
@@ -110,6 +129,20 @@ const SignIn = () => {
                 <span className="loading loading-dots loading-xs" />
               ) : (
                 "Submit"
+              )}
+            </Button>
+            <Button onClick={dummyLogin} className="w-full mt-2 ">
+              {formState.isSubmitting || isPending ? (
+                <span className="loading loading-dots loading-xs" />
+              ) : (
+                "Batman"
+              )}
+            </Button>
+            <Button onClick={dummyLogin2} className="w-full mt-2 ">
+              {formState.isSubmitting || isPending ? (
+                <span className="loading loading-dots loading-xs" />
+              ) : (
+                "Superman"
               )}
             </Button>
           </form>

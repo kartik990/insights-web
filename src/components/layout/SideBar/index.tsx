@@ -18,9 +18,12 @@ const SideBar: React.FC<SideBarProps> = () => {
         <SquarePen />
         New Post
       </Link>
-      <div className="text-lg text-[#55AD9B] px-8 py-4 border-y-2 border-[#D8EFD3] hover:border-[#55ad9b5d] font-semibold cursor-pointer flex items-center gap-2 b">
+      <Link
+        href={"/profile"}
+        className="text-lg text-[#55AD9B] px-8 py-4 border-y-2 border-[#D8EFD3] hover:border-[#55ad9b5d]  font-semibold cursor-pointer flex items-center gap-2 "
+      >
         <PersonIcon sx={{ scale: 1.2 }} /> Profile
-      </div>
+      </Link>
       <Link
         href="/"
         className="text-lg text-[#55AD9B] px-8 py-4 border-y-2 border-[#D8EFD3] hover:border-[#55ad9b5d] font-semibold cursor-pointer flex items-center gap-2 b"

@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import LargeCard from "./largeCard";
-import SmallCard from "./smallCard";
+import Card from "./Card";
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "@/services/user";
+import { Member } from "@/types/user";
 
 interface MembersProps {}
 
@@ -16,16 +16,17 @@ const Members: React.FC<MembersProps> = () => {
 
   console.log(data, isLoading, error);
 
+  const members = data?.data as Member[];
+
   return (
     <div className=" w-full h-full flex justify-center items-center">
       <div className="w-[65%] my-10">
-        <div className="text-primary text-xl font-semibold bg-white shadow-md px-4 py-2 rounded-lg mb-4">
-          List of All Members
-        </div>
         <div className="grid grid-cols-2 w-full gap-4 ">
-          {[1, 2, 3, 4].map((card, idx) => {
-            if (idx % 4 == 0 || idx % 4 == 2) return <LargeCard key={idx} />;
-            else return <SmallCard key={idx} />;
+          <div className="text-primary text-xl font-semibold bg-white shadow-md px-6 py-5 rounded-lg mb-0 row-span-1">
+            List of All Members
+          </div>
+          {members?.map((member, idx: number) => {
+            return <Card key={idx} member={member} />;
           })}
         </div>
       </div>
