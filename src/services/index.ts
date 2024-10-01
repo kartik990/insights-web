@@ -1,8 +1,11 @@
 import axios from "axios";
 
-// const BASE_URL = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:8000';
+export const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://insights-server-ssvi.onrender.com"
+    : "http://localhost:8000";
 
-export const BASE_URL = "http://localhost:8000/";
+// export const BASE_URL = "http://localhost:8000/";
 
 export const BaseQuery = axios.create({
   baseURL: BASE_URL,
