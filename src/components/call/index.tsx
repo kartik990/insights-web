@@ -10,6 +10,8 @@ import CallCards from "./CallCards";
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "@/services/user";
 import { Member } from "@/types/user";
+import { useToast } from "@/hooks/use-toast";
+import { PhoneCall } from "lucide-react";
 
 interface CallProps {}
 
@@ -18,11 +20,15 @@ const Call: React.FC<CallProps> = () => {
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const peerRef = useRef<SimplePeerInstance | null>(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
+  const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
 
   const { user } = useContext(UserContext);
-  const { call } = useContext(NotificationContext);
+  const { call, declineCall } = useContext(NotificationContext);
 
   const [showMembers, setShowMembers] = useState(!call);
+  const [showJoinCallButton, setShowJoinCallButton] = useState<boolean>(!!call);
+
+  const { toast } = useToast();
 
   const { socket } = useSocket();
 
@@ -46,6 +52,9 @@ const Call: React.FC<CallProps> = () => {
   }, []);
 
   const acceptCall = () => {
+    setShowJoinCallButton(false);
+    setShowCancelButton(true);
+
     if (call && myStream) {
       const peer = new Peer({
         initiator: false,
@@ -91,9 +100,20 @@ const Call: React.FC<CallProps> = () => {
       });
     });
 
-    peerRef.current = peer;
-
     setShowMembers(false);
+
+    socket.on(socketEvents.CALL_REJECTED, () => {
+      peer.destroy();
+      peerRef.current = null;
+      setShowMembers(true);
+      toast({
+        variant: "theme",
+        title: "Call Rejected",
+        description: "The Other Person declined the call",
+      });
+    });
+
+    peerRef.current = peer;
 
     socket?.on(socketEvents.CALL_READY, ({ answer }: { answer: any }) => {
       console.log(answer);
@@ -105,8 +125,24 @@ const Call: React.FC<CallProps> = () => {
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = stream;
           }
+
+          setShowCancelButton(true);
         });
       }
+    });
+  };
+
+  const disconnectCall = () => {
+    setShowCancelButton(false);
+    declineCall();
+
+    if (peerRef?.current) peerRef.current.destroy();
+    peerRef.current = null;
+    setShowMembers(true);
+
+    toast({
+      variant: "theme",
+      title: "Call Disconnected",
     });
   };
 
@@ -121,7 +157,10 @@ const Call: React.FC<CallProps> = () => {
             className="w-full h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
           ></video>
           {showMembers ? (
-            <CallCards initiateCall={initiateCall} members={members} />
+            <CallCards
+              initiateCall={initiateCall}
+              members={members?.filter((mem) => mem.email != user?.email)}
+            />
           ) : (
             <video
               ref={remoteVideoRef}
@@ -132,12 +171,20 @@ const Call: React.FC<CallProps> = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4 mt-8">
-        {call && (
+        {showJoinCallButton && (
           <button
-            className="px-4 py-2 bg-primary text-white  rounded"
+            className="px-4 py-2 bg-primary text-white flex gap-2 rounded animate-bounce"
             onClick={acceptCall}
           >
-            Join
+            <PhoneCall /> Join Call
+          </button>
+        )}
+        {showCancelButton && (
+          <button
+            className="px-4 py-2 bg-primary text-white flex gap-2 rounded animate-bounce"
+            onClick={disconnectCall}
+          >
+            Disconnect Call
           </button>
         )}
       </div>

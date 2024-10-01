@@ -8,14 +8,19 @@ interface CallNotification {
   fromName: string;
   fromEmail: string;
   offer: any;
+  showCard: boolean;
 }
 
 export interface NotificationContextType {
   call: CallNotification | null;
+  declineCall: () => void;
+  hideCard: () => void;
 }
 
 export const NotificationContext = createContext<NotificationContextType>({
   call: null,
+  declineCall() {},
+  hideCard() {},
 });
 
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
@@ -29,7 +34,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     socket?.on(
       socketEvents.CALL_NOTIFICATION,
       (callDetails: CallNotification) => {
-        setCall(callDetails);
+        setCall({ ...callDetails, showCard: true });
       }
     );
 
@@ -38,8 +43,17 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     };
   }, [socket]);
 
+  const hideCard = () => {
+    if (call) setCall({ ...call, showCard: false });
+  };
+
+  const declineCall = () => {
+    socket?.emit(socketEvents.CALL_REJECTED, { email: call?.fromEmail });
+    setCall(null);
+  };
+
   return (
-    <NotificationContext.Provider value={{ call }}>
+    <NotificationContext.Provider value={{ call, declineCall, hideCard }}>
       {children}
     </NotificationContext.Provider>
   );

@@ -11,8 +11,6 @@ export default async function uploadOnBucket(blob: any) {
     region: process.env.AWS_REGION, // AWS region
   });
 
-  console.log("-.................>>>>>>>>>", blob);
-
   const s3Params = {
     Bucket: process.env.AWS_BUCKET_NAME, // S3 bucket name
     Key: "photoBJ",

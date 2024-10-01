@@ -1,18 +1,21 @@
 import { Member } from "@/types/user";
-import { PhoneCall } from "lucide-react";
+import { Loader, PhoneCall } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 
 interface CardProps {
   member: Member;
   hover: boolean;
+  online: string;
 }
 
-const Card: React.FC<CardProps> = ({ member, hover }) => {
+const Card: React.FC<CardProps> = ({ member, hover, online }) => {
   return (
     <div
-      className={`min-w-max bg-white shadow-lg border-b-4 rounded-md flex justify-between  gap-4 p-4 cursor-pointer ${
-        hover ? "scale-105 border-primary" : "border-white"
+      className={`min-w-max bg-white shadow-lg border-b-4 rounded-md flex justify-between  gap-4 p-4  ${
+        online == "online" && hover
+          ? "scale-105 border-primary cursor-pointer"
+          : "border-white cursor-default"
       }`}
     >
       <div className="flex gap-3 items-center">
@@ -35,7 +38,15 @@ const Card: React.FC<CardProps> = ({ member, hover }) => {
         </div>
       </div>
 
-      {true ? (
+      {online == "loading" && (
+        <div className="flex items-center self-start gap-1 ">
+          <div className="text-sm text-slate-400 flex gap-1 ">
+            <Loader className=" w-6 animate-spin " /> Loading
+          </div>
+        </div>
+      )}
+
+      {online == "online" ? (
         hover ? (
           <div className="text-primary font-bold flex gap-2 items-center">
             <PhoneCall /> Call
@@ -43,10 +54,12 @@ const Card: React.FC<CardProps> = ({ member, hover }) => {
         ) : (
           <div className="flex items-center self-start gap-1">
             <div className="bg-primary rounded-full w-2 h-2 shadow-2xl shadow-green-700" />
-            <div className="text-sm text-foreground">Offline</div>
+            <div className="text-sm text-foreground">Online</div>
           </div>
         )
-      ) : (
+      ) : null}
+
+      {online == "offline" && (
         <div className="flex items-center self-start gap-1 ">
           <div className="bg-slate-400 rounded-full w-2 h-2 shadow-2xl shadow-green-700" />
           <div className="text-sm text-slate-400">Offline</div>
