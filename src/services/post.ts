@@ -1,9 +1,7 @@
 import {
   AddCommentPayload,
-  CommentRes,
   CreatePostPayload,
   InteractionPayload,
-  PostInterface,
 } from "@/types/post";
 import BaseQuery from ".";
 

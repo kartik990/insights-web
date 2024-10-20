@@ -27,7 +27,7 @@ const NotificationCard: React.FC<NotificationCardProps> = () => {
             Accept
           </Button>
         </Link>
-        <Button onClick={declineCall} className="bg-red-400">
+        <Button onClick={() => declineCall()} className="bg-red-400">
           Decline
         </Button>
       </div>
