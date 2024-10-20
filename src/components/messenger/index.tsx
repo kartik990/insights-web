@@ -1,5 +1,6 @@
 "use client";
 
+import socketEvents from "@/constants/socketEvents";
 import SocketEvents from "@/constants/socketEvents";
 import { UserContext } from "@/contexts/userContext";
 import useSocket from "@/hooks/useSocket";
@@ -8,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CirclePlus, SendHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
 interface MessagesProps {}
@@ -34,12 +35,16 @@ const Messages: React.FC<MessagesProps> = () => {
     conversationId: number;
   } | null>();
 
+  const { userId } = useParams();
+
   const { user } = useContext(UserContext);
   const { socket } = useSocket();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+
+  const [onlineUsers, setOnlineUsers] = useState<string[] | null>(null);
 
   if (!user) {
     router.push("/auth/sign-in");
@@ -53,7 +58,25 @@ const Messages: React.FC<MessagesProps> = () => {
   //@ts-ignore
   const chats = data?.data?.chats;
 
-  console.log(chats);
+  useEffect(() => {
+    if (chats && userId) {
+      for (let chat of chats) {
+        const otherUser = chat.users.filter(
+          (u: any) => u.user.id == userId
+        ).user;
+
+        console.log(otherUser);
+
+        setSelectedUser({
+          id: otherUser?.id,
+          name: otherUser?.name,
+          email: otherUser?.email,
+          profileUrl: otherUser?.profileUrl,
+          conversationId: chat?.id,
+        });
+      }
+    }
+  }, [chats, userId]);
 
   useEffect(() => {
     const func = async () => {
@@ -118,7 +141,27 @@ const Messages: React.FC<MessagesProps> = () => {
       }
     };
 
+    socket.on(socketEvents.ONLINE_USERS, (onlineUsers: any) => {
+      setOnlineUsers(onlineUsers);
+    });
+
+    socket.on(
+      socketEvents.UPDATE_ONLINE_USERS,
+      ({ added, remove }: { added?: string; remove?: string }) => {
+        if (added) {
+          setOnlineUsers((prev) => (prev ? [...prev, added] : prev));
+        }
+
+        if (remove) {
+          setOnlineUsers((prev) =>
+            prev ? prev.filter((email) => email != remove) : prev
+          );
+        }
+      }
+    );
+
     socket.on(SocketEvents.CHAT_MESSAGE, handleMessage);
+    socket?.emit(socketEvents.ONLINE_USERS);
 
     return () => {
       socket.off(SocketEvents.CHAT_MESSAGE, handleMessage);
@@ -167,11 +210,11 @@ const Messages: React.FC<MessagesProps> = () => {
             return (
               <div
                 key={idx}
-                className={`px-4 cursor-pointer shadow-md py-2 flex gap-4 items-center bg-white rounded-lg
+                className={`pl-4 cursor-pointer shadow-md py-2 flex gap-4 items-center bg-white rounded-lg
                   ${
                     selectedUser?.email == otherUser?.email
-                      ? "border-r-8 border-primary"
-                      : ""
+                      ? "border-r-8 border-primary pr-4"
+                      : "pr-6"
                   }`}
                 onClick={() =>
                   setSelectedUser({
@@ -196,9 +239,18 @@ const Messages: React.FC<MessagesProps> = () => {
                     {otherUser?.name[0]}
                   </div>
                 )}
-                <div>
-                  <div className="text-lg font-semibold text-foreground">
-                    {otherUser?.name}
+                <div className="w-full flex flex-col gap-0">
+                  <div className="flex justify-between gap-6 items-center">
+                    <div className="text-lg font-semibold text-foreground">
+                      {otherUser?.name}
+                    </div>
+                    {onlineUsers?.includes(otherUser?.email) ? (
+                      <div className="text-xs font-bold text-white bg-primary max-h-min px-1  rounded-lg flex gap-1 items-center">
+                        Online
+                      </div>
+                    ) : (
+                      <div className="text-xs text-slate-400">Offline</div>
+                    )}
                   </div>
                   <div className="text-sm text-foreground">{`${new Date(
                     chat.updatedAt
@@ -212,10 +264,10 @@ const Messages: React.FC<MessagesProps> = () => {
             );
           })}
         </div>
-        <div className="w-[70%] h-full flex flex-col gap-2 ">
+        <div className="w-[75%] h-full flex flex-col gap-2 ">
           <div
             ref={containerRef}
-            className="w-full flex flex-col-reverse  bg-white h-[500px] rounded-xl shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin"
+            className="w-full flex flex-col-reverse  bg-white h-[80vh] rounded-xl shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin"
           >
             {messages.map((message: any, idx: number) => {
               return message.isMine ? (

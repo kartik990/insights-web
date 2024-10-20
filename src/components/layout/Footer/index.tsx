@@ -5,8 +5,8 @@ interface FooterProps {}
 // 95D2B3
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <footer className="footer flex justify-center  w-full bg-[#F1F8E8]">
-      <div className="w-[80%] bg-[#55AD9B]  rounded-t-xl  flex justify-between py-14 px-20 text-white">
+    <footer className="footer flex justify-center w-full bg-[#F1F8E8]">
+      <div className="w-[70%] bg-[#55AD9B]  rounded-t-xl  flex justify-between py-14 px-20 text-white">
         <aside>
           <svg
             width="50"

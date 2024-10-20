@@ -20,6 +20,8 @@ import { signup } from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/userContext";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -79,7 +81,7 @@ const SignUp = () => {
   }
 
   return (
-    <div className="w-screen h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center">
       <Card className="p-6 my-10 bg-secondary">
         <CardTitle className="text-3xl font-bold text-foreground mb-4">
           Sign Up
@@ -158,6 +160,16 @@ const SignUp = () => {
             </Button>
           </form>
         </Form>
+        <div className="text-primary mt-4 flex gap-2">
+          {"Already have a account?"}
+          <Link
+            href="/auth/sign-in"
+            className="hover:scale-105 hover:underline cursor-pointer flex items-center gap-2"
+          >
+            Sign in
+            <ExternalLink size={20} />
+          </Link>
+        </div>
       </Card>
     </div>
   );

@@ -1,27 +1,50 @@
 "use client";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import CallIcon from "@mui/icons-material/Call";
 import InboxIcon from "@mui/icons-material/Inbox";
 import PersonIcon from "@mui/icons-material/Person";
-import { Images, Video } from "lucide-react";
+import { Images, Loader, Video } from "lucide-react";
 import { Member } from "@/types/user";
 import Link from "next/link";
 import { createChatRoom } from "@/services/user";
 import { UserContext } from "@/contexts/userContext";
+import { useRouter } from "next/navigation";
 
 interface LargeCardProps {
   member: Member;
+  connected: boolean;
+  loading: boolean;
 }
 
-const LargeCard: React.FC<LargeCardProps> = ({ member }) => {
+const LargeCard: React.FC<LargeCardProps> = ({
+  member,
+  connected,
+  loading,
+}) => {
   const { user } = useContext(UserContext);
+  const [loadingChat, setLoadingChat] = useState(false);
 
-  const handleCreateRoom = async (email: string) => {
-    if (!user?.email) return;
+  const router = useRouter();
 
-    const res = await createChatRoom(user?.email, email);
-    console.log(res);
+  const handleCreateRoom = async (email: string, id: string) => {
+    if (!user?.email || email == user.email) return;
+
+    console.log(connected);
+
+    setLoadingChat(true);
+    if (!connected) {
+      try {
+        console.log("new connection");
+        const res = await createChatRoom(user?.email, email);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    setLoadingChat(false);
+
+    router.push("/message/" + id);
   };
 
   return (
@@ -54,30 +77,44 @@ const LargeCard: React.FC<LargeCardProps> = ({ member }) => {
         {member.name} ({member.email})
       </div>
       <div className="px-8 pt-6 grid grid-cols-2 gap-3 text-primary">
-        <div
-          onClick={() => handleCreateRoom(member.email)}
-          className="flex gap-2 items-center cursor-pointer hover:scale-105"
-        >
-          <InboxIcon /> Message
-        </div>
+        {loading || loadingChat ? (
+          <div className="flex items-center gap-2">
+            <Loader className="animate-spin" /> loading...
+          </div>
+        ) : (
+          member?.email != user?.email && (
+            <div
+              onClick={() => handleCreateRoom(member.email, member.id)}
+              className="flex gap-2 items-center cursor-pointer hover:scale-105"
+            >
+              <InboxIcon /> Message
+            </div>
+          )
+        )}
         <Link
           href={`/profile/${member.id}`}
           className="flex gap-2 items-center cursor-pointer hover:scale-105"
         >
           <PersonIcon /> Open profile
         </Link>
-        <div className="flex gap-2 items-center cursor-pointer hover:scale-105">
+        <Link
+          href={`/call`}
+          className="flex gap-2 items-center cursor-pointer hover:scale-105"
+        >
           <CallIcon /> Call
-        </div>
+        </Link>
         <Link
           href={`/profile/${member.id}#posts`}
           className="flex gap-2 items-center cursor-pointer hover:scale-105"
         >
           <Images /> See Posts
         </Link>
-        <div className="flex gap-2 items-center cursor-pointer hover:scale-105">
+        <Link
+          href={`/call`}
+          className="flex gap-2 items-center cursor-pointer hover:scale-105"
+        >
           <Video /> Video Call
-        </div>
+        </Link>
       </div>
     </div>
   );

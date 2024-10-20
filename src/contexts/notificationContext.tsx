@@ -2,7 +2,14 @@
 
 import socketEvents from "@/constants/socketEvents";
 import useSocket from "@/hooks/useSocket";
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useContext,
+} from "react";
+import { UserContext } from "./userContext";
 
 interface CallNotification {
   fromName: string;
@@ -13,7 +20,7 @@ interface CallNotification {
 
 export interface NotificationContextType {
   call: CallNotification | null;
-  declineCall: () => void;
+  declineCall: (email?: string) => void;
   hideCard: () => void;
 }
 
@@ -29,6 +36,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   const [call, setCall] = useState<CallNotification | null>(null);
 
   const { socket } = useSocket();
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     socket?.on(
@@ -48,7 +57,9 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const declineCall = () => {
-    socket?.emit(socketEvents.CALL_REJECTED, { email: call?.fromEmail });
+    socket?.emit(socketEvents.CALL_REJECTED, {
+      email: call?.fromEmail,
+    });
     setCall(null);
   };
 

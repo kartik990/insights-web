@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import Card from "./Card";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUsers } from "@/services/user";
+import { getAllUsers, getChats } from "@/services/user";
 import { Member } from "@/types/user";
+import { UserContext } from "@/contexts/userContext";
+import { useRouter } from "next/navigation";
 
 interface MembersProps {}
 
@@ -14,9 +16,26 @@ const Members: React.FC<MembersProps> = () => {
     queryFn: getAllUsers,
   });
 
-  console.log(data, isLoading, error);
+  const { user } = useContext(UserContext);
 
   const members = data?.data as Member[];
+
+  const router = useRouter();
+
+  if (!user) {
+    router.push("/auth/sign-in");
+  }
+
+  const { data: chats, isLoading: chatLoading } = useQuery({
+    queryKey: ["chats"],
+    queryFn: () => getChats(user?.userId as string),
+  });
+
+  //@ts-ignore
+  const connectEmail = chats?.data?.chats?.map((chat) => {
+    return chat?.users.filter((u: any) => u.user.email != user?.email)[0]?.user
+      ?.email;
+  });
 
   return (
     <div className=" w-full h-full flex justify-center items-center">
@@ -26,7 +45,14 @@ const Members: React.FC<MembersProps> = () => {
             List of All Members
           </div>
           {members?.map((member, idx: number) => {
-            return <Card key={idx} member={member} />;
+            return (
+              <Card
+                key={idx}
+                member={member}
+                connected={connectEmail?.includes(member.email)}
+                loading={chatLoading}
+              />
+            );
           })}
         </div>
       </div>

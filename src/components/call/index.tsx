@@ -21,6 +21,7 @@ const Call: React.FC<CallProps> = () => {
   const peerRef = useRef<SimplePeerInstance | null>(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
+  const [connectedEmail, setConnectedEmail] = useState<string | null>(null);
 
   const { user } = useContext(UserContext);
   const { call, declineCall } = useContext(NotificationContext);
@@ -51,6 +52,23 @@ const Call: React.FC<CallProps> = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on(socketEvents.CALL_DISCONNECT, () => {
+      if (peerRef?.current) peerRef?.current?.destroy();
+      peerRef.current = null;
+
+      setShowMembers(true);
+      setShowCancelButton(false);
+
+      toast({
+        variant: "theme",
+        title: "Call Disconnected",
+      });
+    });
+  }, [socket, toast]);
+
   const acceptCall = () => {
     setShowJoinCallButton(false);
     setShowCancelButton(true);
@@ -71,6 +89,7 @@ const Call: React.FC<CallProps> = () => {
 
       peer.signal(call.offer);
       peerRef.current = peer;
+      setConnectedEmail(call.fromEmail);
 
       if (remoteVideoRef?.current) {
         peerRef.current?.on("stream", (stream) => {
@@ -105,7 +124,9 @@ const Call: React.FC<CallProps> = () => {
     socket.on(socketEvents.CALL_REJECTED, () => {
       peer.destroy();
       peerRef.current = null;
+
       setShowMembers(true);
+
       toast({
         variant: "theme",
         title: "Call Rejected",
@@ -114,10 +135,9 @@ const Call: React.FC<CallProps> = () => {
     });
 
     peerRef.current = peer;
+    setConnectedEmail(email);
 
     socket?.on(socketEvents.CALL_READY, ({ answer }: { answer: any }) => {
-      console.log(answer);
-
       peerRef.current?.signal(answer);
 
       if (remoteVideoRef?.current) {
@@ -134,11 +154,12 @@ const Call: React.FC<CallProps> = () => {
 
   const disconnectCall = () => {
     setShowCancelButton(false);
-    declineCall();
+    setShowMembers(true);
 
     if (peerRef?.current) peerRef.current.destroy();
     peerRef.current = null;
-    setShowMembers(true);
+
+    socket?.emit(socketEvents.CALL_DISCONNECT, { email: connectedEmail });
 
     toast({
       variant: "theme",
@@ -181,7 +202,7 @@ const Call: React.FC<CallProps> = () => {
         )}
         {showCancelButton && (
           <button
-            className="px-4 py-2 bg-primary text-white flex gap-2 rounded animate-bounce"
+            className="px-4 py-2 bg-primary text-white flex gap-2 rounded "
             onClick={disconnectCall}
           >
             Disconnect Call

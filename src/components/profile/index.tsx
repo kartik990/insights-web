@@ -41,7 +41,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
   return (
     <div className="w-full h-full">
-      <div className="w-[60%] h-48 bg-accent m-auto relative top-2 rounded-b-[80px] z-10 shadow-md">
+      <div className="w-[100%] sm:w-[60%] h-48 bg-accent m-auto relative top-2 rounded-b-[80px] z-10 shadow-md">
         {userData?.coverUrl && (
           <Image
             src={userData?.coverUrl}

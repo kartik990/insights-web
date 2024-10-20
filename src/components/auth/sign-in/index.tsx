@@ -20,6 +20,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/userContext";
 import { useRouter } from "next/navigation";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -83,7 +85,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center gap-8">
       <Card className="p-6 my-10 bg-secondary">
         <CardTitle className="text-3xl font-bold text-foreground mb-4">
           Sign In
@@ -128,25 +130,43 @@ const SignIn = () => {
               {formState.isSubmitting || isPending ? (
                 <span className="loading loading-dots loading-xs" />
               ) : (
-                "Submit"
-              )}
-            </Button>
-            <Button onClick={dummyLogin} className="w-full mt-2 ">
-              {formState.isSubmitting || isPending ? (
-                <span className="loading loading-dots loading-xs" />
-              ) : (
-                "Batman"
-              )}
-            </Button>
-            <Button onClick={dummyLogin2} className="w-full mt-2 ">
-              {formState.isSubmitting || isPending ? (
-                <span className="loading loading-dots loading-xs" />
-              ) : (
-                "Superman"
+                "Sign in"
               )}
             </Button>
           </form>
         </Form>
+        <div className="text-primary mt-4 flex gap-2">
+          {"Don't have a account?"}
+          <Link
+            href="/auth/sign-up"
+            className="hover:scale-105 hover:underline cursor-pointer flex items-center gap-2"
+          >
+            Sign up
+            <ExternalLink size={20} />
+          </Link>
+        </div>
+      </Card>
+      <Card className="p-6 my-10 bg-secondary w-[300px]">
+        <CardTitle className="text-3xl font-bold text-foreground mb-4">
+          Demo Login
+        </CardTitle>
+        <div className="text-slate-500 mb-2">
+          You can try any of these dummy account for application demo.
+        </div>
+        <Button onClick={dummyLogin} className="w-full mt-2 ">
+          {formState.isSubmitting || isPending ? (
+            <span className="loading loading-dots loading-xs" />
+          ) : (
+            "Sign in as Batman"
+          )}
+        </Button>
+        <Button onClick={dummyLogin2} className="w-full mt-2 ">
+          {formState.isSubmitting || isPending ? (
+            <span className="loading loading-dots loading-xs" />
+          ) : (
+            "Sign in as Superman"
+          )}
+        </Button>
       </Card>
     </div>
   );
