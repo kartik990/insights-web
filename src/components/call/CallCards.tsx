@@ -28,12 +28,10 @@ const CallCards: React.FC<CallCardsProps> = ({ members, initiateCall }) => {
       socketEvents.UPDATE_ONLINE_USERS,
       ({ added, remove }: { added?: string; remove?: string }) => {
         if (added) {
-          console.log(added);
           setOnlineUsers((prev) => (prev ? [...prev, added] : prev));
         }
 
         if (remove) {
-          console.log(remove);
           setOnlineUsers((prev) =>
             prev ? prev.filter((email) => email != remove) : prev
           );

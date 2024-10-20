@@ -47,7 +47,6 @@ const CreatePost: React.FC<CreatePostProps> = () => {
     mutationKey: ["post"],
     mutationFn: (payload: CreatePostPayload) => createPost(payload),
     onSuccess: (data) => {
-      console.log(data);
       router.push("/profile");
     },
   });

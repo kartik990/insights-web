@@ -116,7 +116,6 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
         userId: user?.userId,
         type,
       });
-      console.log(res);
     } catch (err) {
       console.log(err);
 

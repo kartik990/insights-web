@@ -60,7 +60,6 @@ const SignUp = () => {
     mutationFn: signup,
     onSuccess: (data) => {
       alert("Signup successful!");
-      console.log("User signed up:", data);
       // @ts-ignore
       addUser({ email: data?.data?.email, name: data?.data?.name });
       router.push("/");
@@ -71,7 +70,6 @@ const SignUp = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     mutate({
       email: values.email,
       name: values.name,

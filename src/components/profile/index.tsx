@@ -37,7 +37,6 @@ const Profile: React.FC<ProfileProps> = () => {
 
   const userData: any = data?.data;
   const posts: PostInterface[] = userData?.posts;
-  console.log(userData);
 
   return (
     <div className="w-full h-full">

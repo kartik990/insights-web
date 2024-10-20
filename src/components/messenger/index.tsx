@@ -65,8 +65,6 @@ const Messages: React.FC<MessagesProps> = () => {
           (u: any) => u.user.id == userId
         ).user;
 
-        console.log(otherUser);
-
         setSelectedUser({
           id: otherUser?.id,
           name: otherUser?.name,
@@ -113,8 +111,6 @@ const Messages: React.FC<MessagesProps> = () => {
         message: message.content,
         isMine: message.senderId === user?.userId,
       }));
-
-      console.log(res.data);
 
       //@ts-ignore
       setMetaData(res?.data?.metaData);

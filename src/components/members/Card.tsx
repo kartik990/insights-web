@@ -30,12 +30,9 @@ const LargeCard: React.FC<LargeCardProps> = ({
   const handleCreateRoom = async (email: string, id: string) => {
     if (!user?.email || email == user.email) return;
 
-    console.log(connected);
-
     setLoadingChat(true);
     if (!connected) {
       try {
-        console.log("new connection");
         const res = await createChatRoom(user?.email, email);
       } catch (err) {
         console.log(err);

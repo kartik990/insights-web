@@ -46,8 +46,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
       const links = await uploadFunc(formData);
 
-      console.log(links);
-
       if (profile) payload.profileUrl = links[0];
 
       if (cover) payload.coverUrl = profile ? links[1] : links[0];

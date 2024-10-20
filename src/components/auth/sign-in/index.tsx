@@ -49,7 +49,6 @@ const SignIn = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data: any) => {
-      console.log(data);
       addUser({
         userId: data.data.userId,
         email: data?.data?.email,

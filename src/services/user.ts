@@ -12,8 +12,6 @@ export async function getUser(userId: string) {
 }
 
 export async function updateUser(userId: string, payload: UpdateUserPayload) {
-  console.log(userId, payload);
-
   const res = BaseQuery.put(`/api/user/${userId}`, payload);
   return res;
 }
