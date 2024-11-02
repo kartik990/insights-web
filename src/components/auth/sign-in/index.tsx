@@ -85,7 +85,7 @@ const SignIn = () => {
 
   return (
     <div className="w-full h-full flex flex-col sm:flex-row justify-center items-center sm:gap-8">
-      <Card className="w-[80%] sm:w-auto p-6 mt-10 sm:my-10 bg-secondary">
+      <Card className="w-[85%] sm:w-auto p-6 mt-10 sm:my-10 bg-secondary">
         <CardTitle className="text-3xl font-bold text-foreground mb-4">
           Sign In
         </CardTitle>
@@ -145,11 +145,11 @@ const SignIn = () => {
           </Link>
         </div>
       </Card>
-      <Card className="p-6 my-10 bg-secondary w-[300px]">
+      <Card className="p-6 my-10 bg-secondary w-[85%]">
         <CardTitle className="text-3xl font-bold text-foreground mb-4">
           Demo Login
         </CardTitle>
-        <div className="text-slate-500 mb-2">
+        <div className="text-slate-500 mb-2 text-sm sm:text-md">
           You can try any of these dummy account for application demo.
         </div>
         <Button onClick={dummyLogin} className="w-full mt-2 ">

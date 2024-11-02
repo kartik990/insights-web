@@ -302,7 +302,7 @@ const Messages: React.FC<MessagesProps> = () => {
           </div>
           <div
             ref={containerRef}
-            className="w-full flex flex-col-reverse  bg-white h-[70vh] sm:h-[80vh]  shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin rounded-md sm:rounded-xl"
+            className="w-full flex flex-col-reverse  bg-white h-[380px] sm:h-[80vh]  shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin rounded-md sm:rounded-xl"
           >
             {messages.map((message: any, idx: number) => {
               return message.isMine ? (

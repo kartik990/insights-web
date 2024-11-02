@@ -93,8 +93,8 @@ const CreatePost: React.FC<CreatePostProps> = () => {
     <div className="w-full flex justify-center items-center py-8 sm:py-16">
       <div className="w-[90%] sm:w-[60%]">
         <div className="flex flex-col gap-2 text-[#319783]">
-          <div className="rounded-l-3xl rounded-xl w-full flex justify-between items-center gap-10 bg-[#fff] px-4 py-2 pl-2 shadow-md">
-            <div className="flex items-center gap-3">
+          <div className="rounded-l-3xl rounded-xl w-full flex justify-between items-center gap-4 bg-[#fff] px-4 py-2 pl-2 shadow-md">
+            <div className="flex items-center gap-2">
               {user?.profile ? (
                 <Image
                   alt="avatar"

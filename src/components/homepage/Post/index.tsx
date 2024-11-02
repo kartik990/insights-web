@@ -176,7 +176,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
             <Calendar className="w-4 sm:w-auto" />
             {`${new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
-              month: "long",
+              month: "short",
               day: "numeric",
             })}`}
           </div>

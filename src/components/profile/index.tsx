@@ -32,7 +32,7 @@ const Profile: React.FC<ProfileProps> = () => {
   });
 
   if (isLoading) {
-    return "Loading...";
+    return <div className="mt-16">Loading...</div>;
   }
 
   const userData: any = data?.data;
