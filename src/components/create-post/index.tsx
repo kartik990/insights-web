@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import {
+  Calendar,
   ImageUp,
   Loader,
   MessageCircle,
@@ -112,14 +113,17 @@ const CreatePost: React.FC<CreatePostProps> = () => {
                 {user?.name}
               </div>
             </div>
-            <div className="opacity-70">{`${new Date().toLocaleDateString(
-              "en-US",
-              {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            )}`}</div>
+            <div className="opacity-70 flex gap-1 sm:gap-2 items-center text-sm sm:text-md">
+              <Calendar className="w-4 sm:w-auto" />
+              <div className="font-semibold">{`${new Date().toLocaleDateString(
+                "en-US",
+                {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }
+              )}`}</div>
+            </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-center gap-2 w-full h-full ">
             <div className="w-full min-h-[250px] sm:w-1/2 relative">
