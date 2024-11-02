@@ -5,21 +5,60 @@ import CallIcon from "@mui/icons-material/Call";
 import InboxIcon from "@mui/icons-material/Inbox";
 import PersonIcon from "@mui/icons-material/Person";
 import ContactsIcon from "@mui/icons-material/Contacts";
-import { SquarePen } from "lucide-react";
+import { LogIn, LogOut, SquarePen } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useContext } from "react";
+import { UserContext } from "@/contexts/userContext";
+import Image from "next/image";
 
-interface SideBarProps {}
+interface MobileMenuProps {
+  close: () => void;
+}
 
-const SideBar: React.FC<SideBarProps> = () => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ close }) => {
   const pathname = usePathname();
+
+  const { user, removeUser } = useContext(UserContext);
 
   const currentPage = pathname.split("/")[1];
 
-  if (currentPage == "auth") return null;
+  const router = useRouter();
+
+  const handleLogout = () => {
+    removeUser();
+    router.push("/auth/sign-in");
+  };
 
   return (
-    <div className="w-auto h-auto bg-[#D8EFD3] py-4 fixed mt-14 rounded-lg rounded-tr-none rounded-br-3xl shadow-md hidden sm:block">
+    <div className="w-100% h-auto bg-[#D8EFD3]" onClick={close}>
+      <div className="flex flex-col">
+        <div className="w-full">
+          <Link href="/profile">
+            {user?.profile && (
+              <div className="flex w-full items-center gap-2 pr-4 pl-6 py-4 text-lg font-bold bg-primary text-white mb-2 ">
+                <Image
+                  className="w-8 h-8 rounded-full "
+                  src={user?.profile}
+                  alt="profile"
+                  width={100}
+                  height={100}
+                />
+                {user?.name}
+              </div>
+            )}
+          </Link>
+          {!user && (
+            <Link
+              href="/auth/sign-in"
+              className="bg-primary px-6 py-[19px] flex gap-2 items-center text-[1.05rem] text-white font-bold "
+            >
+              Log In
+              <LogIn />
+            </Link>
+          )}
+        </div>
+      </div>
       <Link
         href={"/create-post"}
         className={`text-lg text-[#55AD9B] px-6 py-4 border-y-2 border-[#D8EFD3] hover:border-y-[#55ad9b5d] font-semibold cursor-pointer flex items-center gap-2 ${
@@ -85,8 +124,17 @@ const SideBar: React.FC<SideBarProps> = () => {
         <ContactsIcon />
         Members
       </Link>
+      {user && (
+        <div
+          className="mx-6 flex gap-2 items-center py-1 sm:text-[1.05rem] text-primary font-bold cursor-pointer text-md pb-2 mt-16 border-b-2 border-primary"
+          onClick={handleLogout}
+        >
+          <LogOut />
+          Log Out
+        </div>
+      )}
     </div>
   );
 };
 
-export default SideBar;
+export default MobileMenu;

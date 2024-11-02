@@ -90,8 +90,8 @@ const CreatePost: React.FC<CreatePostProps> = () => {
   console.log(uploadedImagesUrls);
 
   return (
-    <div className="w-full flex justify-center items-center py-16">
-      <div className="w-[60%]">
+    <div className="w-full flex justify-center items-center py-8 sm:py-16">
+      <div className="w-[90%] sm:w-[60%]">
         <div className="flex flex-col gap-2 text-[#319783]">
           <div className="rounded-l-3xl rounded-xl w-full flex justify-between items-center gap-10 bg-[#fff] px-4 py-2 pl-2 shadow-md">
             <div className="flex items-center gap-3">
@@ -104,11 +104,13 @@ const CreatePost: React.FC<CreatePostProps> = () => {
                   className="w-10 rounded-full object-cover object-center"
                 />
               ) : (
-                <div className="w-8 h-8 bg-primary rounded-full flex justify-center items-center text-white text-lg">
+                <div className="w-8 h-8 bg-primary rounded-full flex justify-center items-center text-white ">
                   {user?.name[0]}
                 </div>
               )}
-              <div className="text-xl font-semibold">{user?.name}</div>
+              <div className="text-lg sm:text-xl font-semibold">
+                {user?.name}
+              </div>
             </div>
             <div className="opacity-70">{`${new Date().toLocaleDateString(
               "en-US",
@@ -119,15 +121,15 @@ const CreatePost: React.FC<CreatePostProps> = () => {
               }
             )}`}</div>
           </div>
-          <div className="flex justify-center gap-2 w-full h-full ">
-            <div className="w-1/2 relative">
+          <div className="flex flex-col sm:flex-row justify-center gap-2 w-full h-full ">
+            <div className="w-full min-h-[250px] sm:w-1/2 relative">
               {uploadedImagesUrls.length == 0 ? (
-                <div className="w-full h-full bg-[#fff] opacity-70 rounded-lg text-xl shadow-md flex flex-col justify-center items-center gap-4 ">
+                <div className="w-full min-h-[250px] bg-[#fff] opacity-70 rounded-lg text-xl shadow-md flex flex-col justify-center items-center gap-4 ">
                   <MountainSnow size={40} />
                   No Images to show!
                 </div>
               ) : (
-                <Carousel className="w-full">
+                <Carousel className="w-full h-full">
                   <CarouselContent>
                     {uploadedImagesUrls.map((url, index) => (
                       <CarouselItem key={index}>
@@ -167,7 +169,7 @@ const CreatePost: React.FC<CreatePostProps> = () => {
               </div>
             </div>
 
-            <div className="bg-white py-4 px-5 w-1/2 rounded-xl text-[#319783] shadow-md">
+            <div className="bg-white py-4 px-5 w-full sm:w-1/2 rounded-xl text-[#319783] shadow-md">
               <div className="relative">
                 <input
                   type="text"

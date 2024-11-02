@@ -45,7 +45,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
   };
 
   return (
-    <div className="w-full h-80 row-span-4 bg-white shadow-md rounded-md overflow-hidden relative">
+    <div className="w-full min-h-80 row-span-4 bg-white shadow-md rounded-md overflow-hidden relative">
       {member?.coverUrl ? (
         <Image
           src={member.coverUrl}
@@ -73,7 +73,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
       <div className="pl-24 py-2 bg-foreground text-white text-lg font-bold">
         {member.name} ({member.email})
       </div>
-      <div className="px-8 pt-6 grid grid-cols-2 gap-3 text-primary">
+      <div className="px-8 pt-6 grid grid-cols-2 gap-3 pb-4 text-primary">
         {loading || loadingChat ? (
           <div className="flex items-center gap-2">
             <Loader className="animate-spin" /> loading...

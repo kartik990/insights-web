@@ -11,7 +11,7 @@ const OnlineBadge: React.FC<OnlineBadgeProps> = () => {
 
   return (
     <div
-      className="absolute top-20 right-0 text-lg text-white font-bold bg-primary px-6 py-2 rounded-tl-3xl rounded-bl-3xl cursor-pointer  shadow-md"
+      className="hidden sm:block absolute top-20 right-0 text-lg text-white font-bold bg-primary px-6 py-2 rounded-tl-3xl rounded-bl-3xl cursor-pointer  shadow-md"
       onClick={disconnect}
     >
       {socket ? (

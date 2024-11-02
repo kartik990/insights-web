@@ -40,7 +40,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
   return (
     <div className="w-full h-full">
-      <div className="w-[100%] sm:w-[60%] h-48 bg-accent m-auto relative top-2 rounded-b-[80px] z-10 shadow-md">
+      <div className="w-[100%] sm:w-[60%] h-36 sm:h-48 bg-accent m-auto relative top-2 rounded-b-[80px] z-10 shadow-md">
         {userData?.coverUrl && (
           <Image
             src={userData?.coverUrl}
@@ -51,7 +51,7 @@ const Profile: React.FC<ProfileProps> = () => {
           />
         )}
       </div>
-      <div className="w-32 h-32 rounded-full bg-primary absolute top-44 left-[25%] z-10 shadow-xl flex justify-center items-center text-6xl text-white overflow-hidden">
+      <div className="w-16 h-16 sm:w-32 sm:h-32 rounded-full bg-primary absolute top-44 left-6 sm:top-44 sm:left-[25%] z-10 shadow-xl flex justify-center items-center text-6xl text-white overflow-hidden">
         {userData?.profileUrl ? (
           <Image
             src={userData?.profileUrl}
@@ -63,18 +63,18 @@ const Profile: React.FC<ProfileProps> = () => {
           user?.name[0]
         )}
       </div>
-      <div className="w-[60%] h-auto bg-white m-auto mt-4 relative top-[-80px] z-0 rounded-b-[80px]  shadow-md ">
-        <div className="flex flex-col justify-end h-full pt-[90px] px-16 pb-8">
+      <div className="w-full sm:w-[60%] h-auto bg-white m-auto mt-4 relative top-[-80px] z-0 rounded-b-[25px] sm:rounded-b-[80px] shadow-md ">
+        <div className="flex flex-col justify-end h-full pt-[90px] px-8 sm:px-16 pb-8">
           <div className="border-b-2 border-slate-100 pb-4 flex justify-between">
-            <div className="text-primary text-xl font-bold pl-40">
+            <div className="text-primary text-[17px] sm:text-xl font-bold pl-[68px] sm:pl-40">
               {user?.name} ({user?.email})
             </div>
             <div
               className="flex gap-2 cursor-pointer italic items-center"
               onClick={() => setModal(true)}
             >
-              <Pencil />
-              Edit Profile
+              <Pencil className="w-5 sm:w-auto" />
+              <span className="hidden sm:block">Edit Profile</span>
             </div>
           </div>
           <div className="pt-4">
@@ -87,11 +87,11 @@ const Profile: React.FC<ProfileProps> = () => {
       </div>
       <div
         id="posts"
-        className="text-xl text-foreground font-bold bg-secondary w-[60%] px-6 py-6 rounded-xl m-auto mb-6 mt-[-20px] shadow-md"
+        className="text-xl text-foreground font-bold bg-secondary w-[90%] sm:w-[60%] px-6 py-4 sm:py-6 rounded-xl m-auto mb-4 sm:mb-6 mt-[-50px] sm:mt-[-20px] shadow-md"
       >
         Posts
       </div>
-      <div className="pb-20 flex flex-col gap-16 items-center">
+      <div className="pb-10 sm:pb-20 flex flex-col gap-8 sm:gap-14 items-center">
         {posts?.map((post, idx: number) => (
           <Post
             key={idx}

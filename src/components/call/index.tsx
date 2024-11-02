@@ -170,12 +170,12 @@ const Call: React.FC<CallProps> = () => {
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="w-full flex justify-center items-center">
-        <div className="flex gap-16 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 mt-12 sm:mt-0 justify-center items-center">
           <video
             ref={localVideoRef}
             autoPlay
             muted
-            className="w-full h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
+            className="w-full h-40 sm:h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
           ></video>
           {showMembers ? (
             <CallCards
@@ -186,12 +186,12 @@ const Call: React.FC<CallProps> = () => {
             <video
               ref={remoteVideoRef}
               autoPlay
-              className="w-full h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
+              className="w-full h-40 sm:h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
             ></video>
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-4 mt-8">
+      <div className="flex flex-col gap-4 mt-8 mb-8">
         {showJoinCallButton && (
           <button
             className="px-4 py-2 bg-primary text-white flex gap-2 rounded animate-bounce"

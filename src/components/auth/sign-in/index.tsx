@@ -84,15 +84,15 @@ const SignIn = () => {
   }
 
   return (
-    <div className="w-full h-full flex justify-center items-center gap-8">
-      <Card className="p-6 my-10 bg-secondary">
+    <div className="w-full h-full flex flex-col sm:flex-row justify-center items-center sm:gap-8">
+      <Card className="w-[80%] sm:w-auto p-6 mt-10 sm:my-10 bg-secondary">
         <CardTitle className="text-3xl font-bold text-foreground mb-4">
           Sign In
         </CardTitle>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 w-80"
+            className="space-y-4 sm:w-80 "
           >
             <FormField
               control={form.control}

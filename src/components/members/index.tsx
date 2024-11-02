@@ -39,8 +39,8 @@ const Members: React.FC<MembersProps> = () => {
 
   return (
     <div className=" w-full h-full flex justify-center items-center">
-      <div className="w-[65%] my-10">
-        <div className="grid grid-cols-2 w-full gap-4 ">
+      <div className="w-[90%] sm:w-[65%] my-6 sm:my-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-6 sm:gap-4 ">
           <div className="text-primary text-xl font-semibold bg-white shadow-md px-6 py-5 rounded-lg mb-0 row-span-1">
             List of All Members
           </div>

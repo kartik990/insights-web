@@ -150,12 +150,12 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
   const comments: undefined | Comment[] = data?.data?.comments;
 
   return (
-    <div className="w-[60%]">
+    <div className="w-[90%] sm:w-[60%]">
       <div className="flex flex-col gap-2 text-[#319783]">
-        <div className="rounded-xl w-full flex justify-between items-center gap-10 bg-[#fff] px-4 py-2 pl-2 shadow-md rounded-l-3xl">
+        <div className="rounded-xl w-full flex justify-between items-center gap-2 sm:gap-8 bg-[#fff] px-4 py-2 pl-2 shadow-md rounded-l-3xl">
           <Link
             href={`/profile/${owner?.id}`}
-            className="flex items-center gap-3"
+            className="flex items-center gap-2"
           >
             {owner?.profileUrl ? (
               <Image
@@ -163,15 +163,17 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
                 alt="profile"
                 width={500}
                 height={500}
-                className="w-10 rounded-full"
+                className="w-8 sm:w-10 rounded-full"
               />
             ) : (
               owner?.name![0]
             )}
-            <div className="text-xl font-semibold">{owner?.name}</div>
+            <div className="text-lg sm:text-xl font-semibold">
+              {owner?.name}
+            </div>
           </Link>
-          <div className="opacity-70 flex gap-2 ">
-            <Calendar />
+          <div className="opacity-70 flex gap-1 sm:gap-2 items-center text-sm sm:text-md">
+            <Calendar className="w-4 sm:w-auto" />
             {`${new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -179,9 +181,9 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
             })}`}
           </div>
         </div>
-        <div className="flex justify-center gap-2 w-full">
+        <div className="flex flex-col sm:flex-row justify-center gap-2 w-full">
           {post?.imgUrl?.length && (
-            <Carousel className="w-1/2">
+            <Carousel className="w-full sm:w-1/2">
               <CarouselContent>
                 {post?.imgUrl.map((url, index) => (
                   <CarouselItem key={index}>
@@ -237,7 +239,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
               <MessageCircle size={26} />
             </div>
             {showComment && (
-              <div className="flex w-full gap-2">
+              <div className="hidden sm:flex w-full gap-2">
                 <input
                   className="border-b-2 border-primary w-full outline-none ml-2 transition-all ease-in duration-300 px-2 bg-white shadow-inner"
                   value={commentInput}
@@ -261,6 +263,27 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
               <Share2 size={24} />
             </div>
           </div>
+          {showComment && (
+            <div className="flex sm:hidden w-full gap-2">
+              <input
+                className="border-b-2 border-primary w-full outline-none ml-2 transition-all ease-in duration-300 px-2 bg-white shadow-inner py-2"
+                value={commentInput}
+                onChange={(e) => setCommentInput(e?.target?.value)}
+                autoFocus
+              />
+              <button
+                className="bg-primary px-4 py-1 text-white rounded-lg flex justify-center items-center cursor-pointer shadow-md"
+                onClick={createComment}
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <span className="loading loading-dots loading-xs" />
+                ) : (
+                  <SendHorizontal className="scale-90" />
+                )}
+              </button>
+            </div>
+          )}
           {showComment && (
             <div className="mt-2 flex flex-col gap-2 pb-2 transition-all ease-in duration-300	text-[#319783]">
               {loadingComments && (

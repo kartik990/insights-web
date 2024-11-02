@@ -6,7 +6,7 @@ import { UserContext } from "@/contexts/userContext";
 import useSocket from "@/hooks/useSocket";
 import { getChats, getOldMessages } from "@/services/user";
 import { useQuery } from "@tanstack/react-query";
-import { CirclePlus, SendHorizontal } from "lucide-react";
+import { ChevronLeft, CirclePlus, SendHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -45,6 +45,8 @@ const Messages: React.FC<MessagesProps> = () => {
   const router = useRouter();
 
   const [onlineUsers, setOnlineUsers] = useState<string[] | null>(null);
+
+  const [showMobileMessenger, setShowMobileMessenger] = useState(false);
 
   if (!user) {
     router.push("/auth/sign-in");
@@ -189,8 +191,16 @@ const Messages: React.FC<MessagesProps> = () => {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="w-[60%] h-[85%] flex">
-        <div className="min-w-max px-2  flex flex-col justify-end gap-2">
+      <div
+        className={`w-full sm:w-[65%] h-[100%] sm:h-[85%] flex ${
+          showMobileMessenger ? "mt-12" : "mt-12"
+        }  sm:mt-4`}
+      >
+        <div
+          className={` ${
+            showMobileMessenger ? "hidden sm:flex" : "flex sm:flex"
+          } min-w-full sm:min-w-max px-2 flex-col justify-start sm:justify-end gap-2`}
+        >
           <Link
             href="/member"
             className="w-full flex justify-center gap-2 items-center p-4 border-dashed border-2 border-primary font-bold rounded-md text-foreground cursor-pointer"
@@ -212,15 +222,16 @@ const Messages: React.FC<MessagesProps> = () => {
                       ? "border-r-8 border-primary pr-4"
                       : "pr-6"
                   }`}
-                onClick={() =>
+                onClick={() => {
+                  setShowMobileMessenger(true);
                   setSelectedUser({
                     id: otherUser?.id,
                     name: otherUser?.name,
                     email: otherUser?.email,
                     profileUrl: otherUser?.profileUrl,
                     conversationId: chat?.id,
-                  })
-                }
+                  });
+                }}
               >
                 {otherUser?.profileUrl ? (
                   <Image
@@ -260,16 +271,44 @@ const Messages: React.FC<MessagesProps> = () => {
             );
           })}
         </div>
-        <div className="w-[75%] h-full flex flex-col gap-2 ">
+        <div
+          className={` ${
+            showMobileMessenger ? "flex sm:flex" : "hidden sm:flex"
+          } w-[95%] mx-auto sm:w-[75%] h-full flex-col gap-1 sm:gap-2 `}
+        >
+          <div className="flex sm:hidden w-full bg-primary rounded-md p-2 gap-2 text-white items-center">
+            <div
+              onClick={() => setShowMobileMessenger(false)}
+              className=" flex items-center justify-center"
+            >
+              <ChevronLeft />
+            </div>
+            {selectedUser?.profileUrl ? (
+              <Image
+                alt="avatar"
+                src={selectedUser?.profileUrl}
+                width={80}
+                height={80}
+                className="w-10 h-10 rounded-full"
+              />
+            ) : (
+              <div className="text-white text-bold bg-primary w-10 h-10 rounded-full flex justify-center items-center text-lg">
+                {user?.name[0]}
+              </div>
+            )}
+            <div className="text-lg font-semibold ml-2">
+              {selectedUser?.name}
+            </div>
+          </div>
           <div
             ref={containerRef}
-            className="w-full flex flex-col-reverse  bg-white h-[80vh] rounded-xl shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin"
+            className="w-full flex flex-col-reverse  bg-white h-[70vh] sm:h-[80vh]  shadow-md px-4 py-2  overflow-y-scroll text-primary  scrollbar-thumb-primary scrollbar-track-transparent scrollbar-thin rounded-md sm:rounded-xl"
           >
             {messages.map((message: any, idx: number) => {
               return message.isMine ? (
                 <div className="chat chat-end " key={idx}>
                   <div className="chat-image avatar">
-                    <div className="w-10 rounded-full">
+                    <div className="w-0 sm:w-10 rounded-full ">
                       {user?.profile ? (
                         <Image
                           alt=""
@@ -291,7 +330,7 @@ const Messages: React.FC<MessagesProps> = () => {
               ) : (
                 <div className="chat chat-start " key={idx}>
                   <div className="chat-image avatar">
-                    <div className="w-10 rounded-full">
+                    <div className="w-0 sm:w-10 rounded-full">
                       {selectedUser?.profileUrl ? (
                         <Image
                           alt="avatar"
@@ -322,7 +361,7 @@ const Messages: React.FC<MessagesProps> = () => {
                 </div>
               )}
           </div>
-          <div className="bg-white h-14 rounded-xl shadow-md px-2 flex justify-between pr-0 text-primary overflow-hidden ">
+          <div className="bg-white h-14 shadow-md px-2 flex justify-between pr-0 text-primary overflow-hidden rounded-md sm:rounded-xl ">
             <input
               className="h-full w-full bg-transparent px-2 outline-none text-primary"
               type="text"
