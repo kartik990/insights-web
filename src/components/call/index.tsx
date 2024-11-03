@@ -170,12 +170,12 @@ const Call: React.FC<CallProps> = () => {
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="w-full flex justify-center items-center">
-        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 mt-12 sm:mt-0 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-16 mt-8 sm:mt-0 justify-center items-center">
           <video
             ref={localVideoRef}
             autoPlay
             muted
-            className="w-full h-40 sm:h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
+            className="w-full min-w-[85vw] sm:min-w-0 h-44 sm:h-80 bg-black rounded-lg shadow-lg border-8 border-primary "
           ></video>
           {showMembers ? (
             <CallCards
@@ -186,7 +186,7 @@ const Call: React.FC<CallProps> = () => {
             <video
               ref={remoteVideoRef}
               autoPlay
-              className="w-full h-40 sm:h-80 bg-white rounded-lg shadow-lg border-8 border-primary "
+              className="w-full h-44 sm:h-80 bg-black rounded-lg shadow-lg border-8 border-primary "
             ></video>
           )}
         </div>

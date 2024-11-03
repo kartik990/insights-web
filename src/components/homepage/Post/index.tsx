@@ -182,7 +182,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row justify-center gap-2 w-full">
-          {post?.imgUrl?.length && (
+          {post?.imgUrl?.length ? (
             <Carousel className="w-full sm:w-1/2">
               <CarouselContent>
                 {post?.imgUrl.map((url, index) => (
@@ -204,7 +204,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
                 </>
               )}
             </Carousel>
-          )}
+          ) : null}
           <div className="bg-white min-h-60 py-4 px-5 flex-1 rounded-xl text-[#319783] shadow-md">
             <div className="text-2xl mb-2 font-semibold">{post.title}</div>
             <div>{post.content}</div>
@@ -212,7 +212,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
         </div>
         <div className="bg-[#fff] p-4 py-3 text-[#55AD9B] flex flex-col gap-2 rounded-xl transition-all ease-in duration-300 rounded-b-3xl	shadow-md">
           <div className="flex gap-2 transition-all ease-in duration-300	">
-            <div
+            <button
               onClick={() => handleInteraction("like")}
               className={` flex gap-2 text-lg  rounded-2xl px-2 py-1 cursor-pointer  ${
                 interaction.userLiked == "like"
@@ -221,8 +221,8 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
               }`}
             >
               <ThumbsUp size={24} /> {interaction.likes}
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => handleInteraction("unlike")}
               className={` flex gap-2 text-lg  rounded-2xl px-2 py-1 cursor-pointer  ${
                 interaction.userLiked == "unlike"
@@ -231,7 +231,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
               }`}
             >
               <ThumbsDown size={24} className="mt-1" /> {interaction.unlikes}
-            </div>
+            </button>
             <div
               className="cursor-pointer px-0 py-1"
               onClick={handleCommentToggle}
