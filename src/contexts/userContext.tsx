@@ -2,7 +2,7 @@
 
 import SocketEvents from "@/constants/socketEvents";
 import useSocket from "@/hooks/useSocket";
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 
 interface User {
   userId: string;
@@ -30,11 +30,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 
   const { socket } = useSocket();
 
+  useEffect(() => {
+    if (socket && user) {
+      socket.emit(SocketEvents.USER_DETAILS, { email: user.email });
+    }
+  }, [socket, user]);
+
   const addUser = (userData: User) => {
     setUser(userData);
-    if (socket) {
-      socket.emit(SocketEvents.USER_DETAILS, { email: userData.email });
-    }
   };
 
   const removeUser = () => {

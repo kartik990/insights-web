@@ -243,6 +243,7 @@ const Post: React.FC<PostProps> = ({ post, owner }) => {
                 <input
                   className="border-b-2 border-primary w-full outline-none ml-2 transition-all ease-in duration-300 px-2 bg-white shadow-inner"
                   value={commentInput}
+                  onKeyDown={(e) => (e.key == "Enter" ? createComment() : null)}
                   onChange={(e) => setCommentInput(e?.target?.value)}
                   autoFocus
                 />

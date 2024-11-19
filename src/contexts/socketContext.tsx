@@ -5,7 +5,8 @@ import io from "socket.io-client";
 export const SocketContext = createContext<{
   socket: SocketIOClient.Socket | null;
   disconnect: () => void;
-}>({ socket: null, disconnect: () => {} });
+  connect: () => void;
+}>({ socket: null, disconnect: () => {}, connect: () => {} });
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -17,7 +18,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     setSocket(skt);
 
     return () => {
-      skt.disconnect();
+      if (skt) skt.disconnect();
     };
   }, []);
 
@@ -26,8 +27,13 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     setSocket(null);
   };
 
+  const connect = () => {
+    const skt = io(BASE_URL);
+    setSocket(skt);
+  };
+
   return (
-    <SocketContext.Provider value={{ socket, disconnect }}>
+    <SocketContext.Provider value={{ socket, disconnect, connect }}>
       {children}
     </SocketContext.Provider>
   );

@@ -3,6 +3,7 @@
 import socketEvents from "@/constants/socketEvents";
 import SocketEvents from "@/constants/socketEvents";
 import { UserContext } from "@/contexts/userContext";
+import { useToast } from "@/hooks/use-toast";
 import useSocket from "@/hooks/useSocket";
 import { getChats, getOldMessages } from "@/services/user";
 import { useQuery } from "@tanstack/react-query";
@@ -43,6 +44,8 @@ const Messages: React.FC<MessagesProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+
+  const { toast } = useToast();
 
   const [onlineUsers, setOnlineUsers] = useState<string[] | null>(null);
 
@@ -170,7 +173,10 @@ const Messages: React.FC<MessagesProps> = () => {
     if (!inputMessage) return;
 
     if (!socket) {
-      alert("not connected to internet");
+      toast({
+        variant: "theme",
+        title: "You are Offline",
+      });
       return;
     }
 

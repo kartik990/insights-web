@@ -78,7 +78,11 @@ const Header: React.FC<HeaderProps> = () => {
         }`}
       ></div>
 
-      {user && <OnlineBadge />}
+      {user && (
+        <div className="hidden sm:block absolute top-24 right-0">
+          <OnlineBadge />
+        </div>
+      )}
     </div>
   );
 };

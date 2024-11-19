@@ -5,12 +5,15 @@ import CallIcon from "@mui/icons-material/Call";
 import InboxIcon from "@mui/icons-material/Inbox";
 import PersonIcon from "@mui/icons-material/Person";
 import ContactsIcon from "@mui/icons-material/Contacts";
-import { LogIn, LogOut, SquarePen } from "lucide-react";
+import { LogIn, LogOut, PhoneCall, SquarePen } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/userContext";
 import Image from "next/image";
+import OnlineBadge from "../online-badge";
+import useSocket from "@/hooks/useSocket";
+import { useThrottle } from "@/hooks/useThrottle";
 
 interface MobileMenuProps {
   close: () => void;
@@ -24,6 +27,15 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ close }) => {
   const currentPage = pathname.split("/")[1];
 
   const router = useRouter();
+
+  const { socket, disconnect, connect } = useSocket();
+
+  const toggleConnection = () => {
+    if (socket) disconnect();
+    else connect();
+  };
+
+  const throttledToggleConnection = useThrottle(toggleConnection, 1000);
 
   const handleLogout = () => {
     removeUser();
@@ -126,7 +138,29 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ close }) => {
       </Link>
       {user && (
         <div
-          className="mx-6 flex gap-2 items-center py-1 sm:text-[1.05rem] text-primary font-bold cursor-pointer text-md pb-2 mt-16 border-b-2 border-primary"
+          className={`mx-6 flex gap-2 items-center py-1 sm:text-[1.05rem]  font-bold cursor-pointer text-md pb-2 mt-4 border-b-2 ${
+            socket
+              ? "border-primary text-primary"
+              : "border-slate-400 text-slate-400"
+          } `}
+          onClick={throttledToggleConnection}
+        >
+          {socket ? (
+            <div className="flex items-center gap-2">
+              <PhoneCall className="scale-95" />
+              Online <div />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <PhoneCall className="scale-95" />
+              Offline <div />
+            </div>
+          )}
+        </div>
+      )}
+      {user && (
+        <div
+          className="mx-6 flex gap-2 items-center py-1 sm:text-[1.05rem] text-primary font-bold cursor-pointer text-md pb-2 mt-4 border-b-2 border-primary"
           onClick={handleLogout}
         >
           <LogOut />
