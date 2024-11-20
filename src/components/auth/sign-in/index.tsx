@@ -65,21 +65,14 @@ const SignIn = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({
       email: values.email || "bruce@mail.com",
-      password: values.password || "passway",
+      password: values.password || "passwordBruce",
     });
   }
 
   async function dummyLogin() {
     mutate({
       email: "bruce@mail.com",
-      password: "passway",
-    });
-  }
-
-  async function dummyLogin2() {
-    mutate({
-      email: "clark@mail.com",
-      password: "passway",
+      password: "passwordBruce",
     });
   }
 
@@ -150,20 +143,13 @@ const SignIn = () => {
           Demo Login
         </CardTitle>
         <div className="text-slate-500 mb-2 text-sm sm:text-md">
-          You can try any of these dummy account for application demo.
+          You can try any of the dummy account for application demo.
         </div>
         <Button onClick={dummyLogin} className="w-full mt-2 ">
           {formState.isSubmitting || isPending ? (
             <span className="loading loading-dots loading-xs" />
           ) : (
             "Sign in as Batman"
-          )}
-        </Button>
-        <Button onClick={dummyLogin2} className="w-full mt-2 ">
-          {formState.isSubmitting || isPending ? (
-            <span className="loading loading-dots loading-xs" />
-          ) : (
-            "Sign in as Superman"
           )}
         </Button>
       </Card>
